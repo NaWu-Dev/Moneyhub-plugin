@@ -1,0 +1,306 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MoneyHub - Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="" />
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif; 
+        }
+        .priceCalculatedTotal {
+            background-color: lightgray; 
+        }        
+        .priceTotal {
+            background-color: lightgray; 
+            font-size: 120%;
+        }        
+        tr:hover {
+            background-color: #ddd; 
+        }        
+        thead {
+            border-bottom: 1px solid #ddd; 
+        }
+    </style>
+    <script>
+        var subtotalWithoutTax = 0, subtotalWithTaxFP = 0, subtotalWithTaxF = 0, total = 0; 
+
+        function updateSubtotal(x) {
+            var subTotal = 0; 
+            var calculate = x.closest("tbody").getElementsByClassName("priceCalculated");
+            var length = x.closest("tbody").childElementCount - 2; 
+            var i = 0; 
+            for (i = 0; i < length; i++) {
+                subTotal += Number(calculate[i].value); 
+            }
+            return subTotal; 
+        }
+
+        function calculateWithoutTax(x) {
+
+            x.parentElement.nextElementSibling.firstChild.value = x.closest("input").value;    
+            subtotalWithoutTax = updateSubtotal(x); 
+            x.closest("tbody").getElementsByClassName("priceCalculatedTotal")[0].value = subtotalWithoutTax; 
+            calculateTotal(); 
+        }
+
+        function calculateWithTaxFP(x) {
+
+            x.parentElement.nextElementSibling.firstChild.value = x.closest("input").value * 1.1495;   
+            subtotalWithTaxFP = updateSubtotal(x); 
+            x.closest("tbody").getElementsByClassName("priceCalculatedTotal")[0].value = subtotalWithTaxFP; 
+            calculateTotal(); 
+
+        }
+
+        function calculateWithTaxF(x) {
+
+            x.parentElement.nextElementSibling.firstChild.value = x.closest("input").value * 1.05;   
+            subtotalWithTaxF = updateSubtotal(x); 
+            x.closest("tbody").getElementsByClassName("priceCalculatedTotal")[0].value = subtotalWithTaxF; 
+            calculateTotal(); 
+
+        }
+
+        function calculateTotal() {
+            document.getElementById("tbodyTotal").getElementsByClassName("priceTotal")[0].value = subtotalWithoutTax+subtotalWithTaxFP+subtotalWithTaxF; 
+        }
+
+        function newItem(x) {
+
+            x.style.visibility = "hidden"; 
+
+            var currentRowIndex = x.closest("tr").rowIndex; 
+            var row = x.closest("table").insertRow(currentRowIndex+1);
+            var cells = new Array(6); 
+            for (var i= 0; i < cells.length; i++) {
+                cells[i] = row.insertCell(i); 
+            }
+            switch (x.closest("tbody").id) {
+                case "tbodyWithoutTax":
+                    cells[3].innerHTML = "<input type='number' class='priceInput' onchange='calculateWithoutTax(this)'>"; 
+                    break;
+                case "tbodyWithTaxFP": 
+                    cells[3].innerHTML = "<input type='number' class='priceInput' onchange='calculateWithTaxFP(this)'>"; 
+                    break; 
+                case "tbodyWithTaxF": 
+                    cells[3].innerHTML = "<input type='number' class='priceInput' onchange='calculateWithTaxF(this)'>";     
+                default:
+                    break;
+            }    
+            cells[4].innerHTML = "<input type='number' class='priceCalculated' disabled>"; 
+            cells[5].innerHTML = "<input type='button' value='...' onclick='newItem(this)'>";
+
+        }
+    </script>
+</head>
+<body>
+    <div>
+        <h2>MoneyHub Calculator</h2>
+    </div>
+    <div id="itemTable">
+        <table>
+            <thead>
+                <tr>
+                    <th>Tax type</th>
+                    <th>Category</th>
+                    <th>Items</th>
+                    <th>Price</th>
+                    <th>Price (tax+)</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyWithoutTax">
+                <tr>
+                    <td>Without tax</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>三餐</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithoutTax(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>水果</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithoutTax(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>干果</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithoutTax(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>饮料</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithoutTax(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>母婴</td>
+                    <td>喂养</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithoutTax(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>零食</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithoutTax(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="number" class="priceCalculatedTotal" disabled></td>
+                </tr>
+            </tbody>
+            <tbody id="tbodyWithTaxFP">
+                <tr>
+                    <td>With Tax FP (1.1495)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>零食</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>生活</td>
+                    <td>日用</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>干果</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>三餐</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>饮食</td>
+                    <td>饮料</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>健康</td>
+                    <td>药品</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>衣饰</td>
+                    <td>衣裤</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>健康</td>
+                    <td>保健</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>人情</td>
+                    <td>孝敬</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>母婴</td>
+                    <td>童装</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxFP(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="number" class="priceCalculatedTotal" disabled></td>
+                </tr>
+            </tbody>
+            <tbody id="tbodyWithTaxF">
+                <tr>
+                    <td>With Tax F (1.05)</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>母婴</td>
+                    <td>护理</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxF(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>母婴</td>
+                    <td>喂养</td>
+                    <td><input type="number" class="priceInput" onchange="calculateWithTaxF(this)"></td>
+                    <td><input type="number" class="priceCalculated" disabled></td>
+                    <td><input type="button" value="..." onclick="newItem(this)"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><input type="number" class="priceCalculatedTotal" disabled></td>
+                </tr>
+            </tbody>
+            <tbody id="tbodyTotal">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td style="text-align:right">Total</td>
+                    <td><input type="number" class="priceTotal" disabled></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
