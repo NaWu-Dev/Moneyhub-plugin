@@ -1,0 +1,87 @@
+<!DOCTYPE <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>MoneyHub - Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="" />
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif; 
+        }
+        .priceCalculatedTotal {
+            background-color: lightgray; 
+        }        
+        .priceTotal {
+            background-color: lightgray; 
+            font-size: 120%;
+        }        
+        tr:hover {
+            background-color: #ddd; 
+        }        
+        thead {
+            border-bottom: 1px solid #ddd; 
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="main.js"></script>
+</head>
+<body>
+    <div>
+        <h2>MoneyHub Calculator</h2>
+    </div>
+    <div id="divCostcoCategories">
+    </div>
+    <hr>
+    <div>
+        <table>
+            <tr>
+                <td>Price: </td>
+                <td><input type="number" id="price" required></td>
+            </tr>
+            <tr>
+                <td>Tax Type: </td>
+                <td>
+                    <input type="radio" value="noTax" name="taxType">No Tax
+                    <input type="radio" value="taxFP" name="taxType">Tax (FP 1.1495)
+                    <input type="radio" value="taxF" name="taxType">Tax (F 1.05)
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    <input type="button" id="submit" value="Add">
+                </td>
+            </tr>
+        </table>        
+    </div>
+    <hr>
+    <div id="listByInput">
+        <table id="tableListByInput">
+            <thead>
+                <tr>
+                    <td>#</td>
+                    <td>Category</td>
+                    <td>Tax</td>
+                    <td>Price</td>
+                    <td>Price (tax+)</td>
+                </tr>
+            </thead>
+            <tbody id="tbodyListByInput">
+                <tr>                    
+                </tr>
+            </tbody>
+            <tbody id="tbodyListByInputTotal">
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td id="totalPrice"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
