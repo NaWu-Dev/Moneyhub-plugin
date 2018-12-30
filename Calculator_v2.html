@@ -5,22 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>MoneyHub - Calculator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" media="screen" href="" />
-    <style>
-        table {
-            width: 80%; 
-        }
-        body {
-            font-family: Arial, Helvetica, sans-serif; 
-        }     
-        #tbodyListByInputTotal, #tbodyListByCategoryTotal {
-            background-color: lightgray; 
-            font-size: 110%;
-        }        
-        tr:hover {
-            background-color: #ddd; 
-        }   
-    </style>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="main.js"></script>
 </head>
@@ -32,26 +17,24 @@
     </div>
     <hr>
     <div>
-        <table>
-            <tr>
-                <td>Price: </td>
-                <td><input type="number" id="price" required></td>
-            </tr>
-            <tr>
-                <td>Tax Type: </td>
-                <td>
-                    <input type="radio" value="noTax" name="taxType">No Tax
-                    <input type="radio" value="taxFP" name="taxType">Tax (FP 1.1495)
-                    <input type="radio" value="taxF" name="taxType">Tax (F 1.05)
-                </td>
-            </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="button" id="submit" value="Add">
-                </td>
-            </tr>
-        </table>        
+        <div>
+            Price: <input type="number" id="price" required>
+        </div>
+        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+            Tax Type: 
+            <label class="btn btn-secondary active">
+                <input type="radio" value="noTax" name="taxType" autocomplete="off" checked>No Tax
+            </label>            
+            <label class="btn btn-secondary">
+                <input type="radio" value="FP" name="taxType">FP 1.1495
+            </label>
+            <label class="btn btn-secondary">
+                <input type="radio" value="F" name="taxType">F 1.05
+            </label>
+        </div>
+        <div>
+            <input type="button" id="submit" value="Add" class="btn btn-primary btn-lg">
+        </div>     
     </div>
     <hr>
     <div id="listByInput">
