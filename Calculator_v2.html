@@ -7,22 +7,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="" />
     <style>
+        table {
+            width: 80%; 
+        }
         body {
             font-family: Arial, Helvetica, sans-serif; 
-        }
-        .priceCalculatedTotal {
+        }     
+        #tbodyListByInputTotal, #tbodyListByCategoryTotal {
             background-color: lightgray; 
-        }        
-        .priceTotal {
-            background-color: lightgray; 
-            font-size: 120%;
+            font-size: 110%;
         }        
         tr:hover {
             background-color: #ddd; 
-        }        
-        thead {
-            border-bottom: 1px solid #ddd; 
-        }
+        }   
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="main.js"></script>
@@ -61,24 +58,49 @@
         <table id="tableListByInput">
             <thead>
                 <tr>
-                    <td>#</td>
-                    <td>Category</td>
-                    <td>Tax</td>
-                    <td>Price</td>
-                    <td>Price (tax+)</td>
+                    <th>#</th>
+                    <th>Category</th>
+                    <th>Tax Type</th>
+                    <th>Price</th>
+                    <th>Tax</th>
+                    <th>Price (tax+)</th>
                 </tr>
             </thead>
             <tbody id="tbodyListByInput">
-                <tr>                    
-                </tr>
+                <tr></tr>
             </tbody>
             <tbody id="tbodyListByInputTotal">
                 <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <td>Total</td>
-                    <td id="totalPrice"></td>
+                    <td id="totalInputPrice"></td>
+                    <td id="totalCalculatedTax"></td>
+                    <td id="totalCalculatedPrice"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <hr>
+    <div id="listByCategory">
+        <table id="tableListByCategory">
+            <thead>
+                <tr>
+                    <th>Category</th>
+                    <th>Total input price</th>
+                    <th>Total tax</th>
+                    <th>Total price tax+</th>
+                </tr>               
+            </thead>
+            <tbody id="tbodyListByCategory">
+                <tr></tr>
+            </tbody>
+            <tbody id="tbodyListByCategoryTotal">
+                <tr>
+                    <td>Total</td>
+                    <td id="categoryTotalInputPrice"></td>
+                    <td id="categoryTotalCalculatedTax"></td>
+                    <td id="categoryTotalCalculatedPrice"></td>
                 </tr>
             </tbody>
         </table>

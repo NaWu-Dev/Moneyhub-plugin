@@ -2,7 +2,9 @@ $(document).ready(function () {
 
     // Get Category Code and display as buttons
     var jsonCategories; 
-    var totalPrice = 0; 
+    var totalCalculatedPrice = 0, totalInputPrice = 0, totalCalculatedTax = 0; 
+    var categoryTotalInputPrice = 0, categoryTotalTax = 0, categoryTotalCalculatedPrice = 0; 
+    var arrayCategories = [];
     ajaxGetCategory(); 
 
     $("#submit").click(function(event) {
@@ -19,9 +21,17 @@ $(document).ready(function () {
             success: function(jsonCategories) {
                 $("#divCostcoCategories").empty(); 
                 $.each(jsonCategories, function(i, category){
+                    var categoryFontSize = 12
+                    if (category.Count_of_Expense <= 12){
+                       categoryFontSize = 12     
+                    }
+                    else {
+                        categoryFontSize= Math.min(category.Count_of_Expense/12,3)*12
+
+                    }
                     var temp = "<input type='radio' value='" + category.DisplayName + "' id='" + 
                         category.CategoryId + "' name='category'>" + 
-                        category.DisplayName;
+                        "<span style='font-size:"+categoryFontSize+"px'>"+category.DisplayName+"</span>";
                     $("#divCostcoCategories").append(temp);  
                 })
             }, 
@@ -33,37 +43,95 @@ $(document).ready(function () {
 
     function addItem(x) {
         var selectedCategory = $("input[name='category']:checked").val();
-        var inputPrice = $("#price").val();
+        var selectedCategoryId = $("input[name='category']:checked").attr("id");
+        var inputPrice = Number($("#price").val());
         var selectedTaxType = $("input[name='taxType']:checked").val(); 
-        if (selectedCategory)
-        var calculatedPrice = 0; 
+
+        if (selectedCategory == undefined || selectedTaxType == undefined || inputPrice == 0) {
+            alert ("Please enter or select valid value. "); 
+            return; 
+        }
+
+        var calculatedPrice = 0, calculatedTax = 0;
         switch (selectedTaxType) {
             case "noTax":
-                calculatedPrice = Number(inputPrice); 
+                calculatedTax = 0; 
+                calculatedPrice = inputPrice; 
                 break;
             case "taxFP": 
-                calculatedPrice = Number(inputPrice) * 1.1495; 
+                calculatedTax = inputPrice * 0.1495; 
+                calculatedPrice = inputPrice * 1.1495; 
                 break; 
             case "taxF": 
-                calculatedPrice = Number(inputPrice) * 1.05; 
+                calculatedTax = inputPrice * 0.05; 
+                calculatedPrice = inputPrice * 1.05; 
             default:
                 break;
         }
         var tableRowsIndex = $("#tbodyListByInput")[0].rows.length;
-        var row = document.getElementById("tableListByInput").insertRow(tableRowsIndex);
-        var cell0 = row.insertCell(0); 
-        cell0.innerHTML = tableRowsIndex; 
-        var cell1 = row.insertCell(1); 
-        cell1.innerHTML = selectedCategory; 
-        var cell2 = row.insertCell(2); 
-        cell2.innerHTML = selectedTaxType; 
-        var cell3 = row.insertCell(3); 
-        cell3.innerHTML = inputPrice; 
-        var cell4 = row.insertCell(4); 
-        cell4.innerHTML = calculatedPrice; 
+        var rowForListByInput; 
+        rowForListByInput = "<tr><td>" + tableRowsIndex + "</td>" + 
+                        "<td>" + selectedCategory + "</td>" + 
+                        "<td>" + selectedTaxType + "</td>" + 
+                        "<td>" + inputPrice + "</td>" + 
+                        "<td>" + calculatedTax + "</td>" + 
+                        "<td>" + calculatedPrice + "</td>" + 
+                        "</tr>"; 
+        $("#tbodyListByInput:last").append(rowForListByInput);
 
-        totalPrice += calculatedPrice; 
-        $("#totalPrice")[0].innerHTML = totalPrice; 
+        // Total price
+        totalCalculatedPrice += calculatedPrice; 
+        totalInputPrice += inputPrice; 
+        totalCalculatedTax += calculatedTax; 
+        $("#totalInputPrice")[0].innerHTML = totalInputPrice; 
+        $("#totalCalculatedPrice")[0].innerHTML = totalCalculatedPrice; 
+        $("#totalCalculatedTax")[0].innerHTML = totalCalculatedTax; 
+
+        // Add to Category Array
+        if (arrayCategories.length == 0) {
+            arrayCategories.push({'CategoryId': selectedCategoryId, 
+                            'CategoryName': selectedCategory, 
+                            'CategoryInputPrice': inputPrice, 
+                            'CategoryCalculatedTax': calculatedTax, 
+                            'CategoryCalculatedPrice': calculatedPrice}); 
+        } else {
+            var found = false; 
+            $.map(arrayCategories, function(val) {
+                if (val.CategoryId == selectedCategoryId) {
+                    val.CategoryInputPrice += inputPrice; 
+                    val.CategoryCalculatedTax += calculatedTax; 
+                    val.CategoryCalculatedPrice += calculatedPrice; 
+                    found = true; 
+                }
+            })
+            if (!found) {
+                arrayCategories.push({'CategoryId': selectedCategoryId, 
+                                'CategoryName': selectedCategory, 
+                                'CategoryInputPrice': inputPrice, 
+                                'CategoryCalculatedTax': calculatedTax, 
+                                'CategoryCalculatedPrice': calculatedPrice}); 
+            }
+        }
+        categoryTotalInputPrice += inputPrice; 
+        categoryTotalTax += calculatedTax; 
+        categoryTotalCalculatedPrice += calculatedPrice;
+
+        // tableListByCategory
+        var rowForListByCategory; 
+        $("#tbodyListByCategory").empty(); 
+        for (var i = 0; i < arrayCategories.length; i++ ) {
+            rowForListByCategory = "<tr><td>" + arrayCategories[i].CategoryName + "</td>" + 
+                        "<td>" + arrayCategories[i].CategoryInputPrice + "</td>" + 
+                        "<td>" + arrayCategories[i].CategoryCalculatedTax + "</td>" + 
+                        "<td>" + arrayCategories[i].CategoryCalculatedPrice + "</td>" + 
+                        "</tr>"; 
+            $("#tbodyListByCategory:last").append(rowForListByCategory);
+        }        
+        $("#categoryTotalInputPrice")[0].innerHTML = categoryTotalInputPrice; 
+        $("#categoryTotalCalculatedPrice")[0].innerHTML = categoryTotalCalculatedPrice; 
+        $("#categoryTotalCalculatedTax")[0].innerHTML = categoryTotalTax; 
+        
+
     }
 
 })
